@@ -1,5 +1,9 @@
 <html>
+<head>
+<meta name="csrf-token" content="{{ csrf_token() }}"><!-- 必要か不明 -->
+</head>
 <body>
+    <div id='app'></div><!-- 必要か不明 -->
     <div id="chat">
         <textarea v-model="message"></textarea>
         <br>
@@ -45,6 +49,11 @@
 
             mounted() {
                 this.getMessages();
+
+                Echo.channel('chat')
+                    .listen('MessageCreated', (e) => {
+                        this.getMessages(); // 全メッセージを再読込
+                    });
             }
 
         });
